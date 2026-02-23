@@ -39,3 +39,9 @@ sequenceDiagram
     DB-->>FastAPI: Commit success
     FastAPI-->>User: Join URL + Event ID
 ```
+
+Login 
+http://localhost:8000/auth/login<img width="385" height="28" alt="image" src="https://github.com/user-attachments/assets/42d80778-4c85-40f0-aae1-3a6a46f2a197" />
+http://localhost:8000/calendar/events
+http://localhost:8000/docs
+
