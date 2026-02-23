@@ -15,94 +15,23 @@ PostgreSQL (Dockerized Persistence)
 Structured Meeting Metadata Storage
 
 
-flowchart LR
+sequenceDiagram
 
-    subgraph Client Layer
-        U[User]
-    end
+    participant User
+    participant FastAPI
+    participant Identity as Microsoft Identity
+    participant Graph as Microsoft Graph
+    participant DB as PostgreSQL
 
-    subgraph Application Layer
-        A[FastAPI<br>Dockerized Microservice]
-    end
+    User->>FastAPI: /auth/login
+    FastAPI->>Identity: Redirect (OAuth)
+    Identity-->>FastAPI: Authorization Code
+    FastAPI->>Identity: Exchange Code for Token
+    Identity-->>FastAPI: Access Token
 
-    subgraph Identity Layer
-        I[Microsoft Identity<br>OAuth 2.0]
-    end
-
-    subgraph Integration Layer
-        G[Microsoft Graph API]
-    end
-
-    subgraph Persistence Layer
-        P[(PostgreSQL<br>Dockerized DB)]
-    end
-
-    U --> A
-    A --> I
-    I --> A
-    A --> G
-    G --> A
-    A --> P
-
-
-Meeting AI Agent — Technical Overview
-
-1. Authentication Layer
-OAuth 2.0 Authorization Code Flow
-Access token stored temporarily in memory
-Scopes:
-Calendars.ReadWrite
-
-OnlineMeetings.ReadWrite
-
-User.Read
-
-2. Scheduling Layer
-
-Accepts:
-
-Subject
-
-Start time
-
-Duration
-
-Attendees
-
-Converts duration → end time
-
-Calls Microsoft Graph /me/events
-
-3. Teams Link Generation
-
-Generates mock Teams URL
-
-Injected into HTML body
-
-4. Persistence Layer
-
-PostgreSQL (Docker)
-
-meetings table:
-
-event_id
-
-subject
-
-start_time
-
-duration_minutes
-
-join_url
-
-organizer_email
-
-created_at
-
-5. Deployment Layer
-
-Docker Compose
-
-Isolated DB service
-
-App communicates using service name meeting_ai_db
+    User->>FastAPI: POST /meeting/book
+    FastAPI->>Graph: Create Event (Bearer Token)
+    Graph-->>FastAPI: Event Created
+    FastAPI->>DB: Insert meeting metadata
+    DB-->>FastAPI: Commit success
+    FastAPI-->>User: Join URL + Event ID
