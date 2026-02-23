@@ -1,62 +1,72 @@
+🚀 Meeting AI Agent (Enterprise-Grade)
+Overview
+
+A Dockerized FastAPI microservice that integrates Microsoft OAuth 2.0 and Microsoft Graph API to:
+
+Authenticate users securely
+
+Create calendar events
+
+Generate Teams-style meeting links
+
+Persist structured metadata in PostgreSQL
+
+Run fully containerized via Docker Compose
+
+🏗 Architecture
+
 User
-  ↓
-FastAPI (Dockerized)
-  ↓
-Microsoft Identity Platform (OAuth 2.0)
-  ↓
+↓
+FastAPI (Docker)
+↓
+Microsoft Identity Platform (OAuth 2.0 Authorization Code Flow)
+↓
 Microsoft Graph API
-  ↓
-Calendar Event Creation
-  ↓
-Teams Meeting Link Generation
-  ↓
-PostgreSQL (Dockerized Persistence)
-  ↓
-Structured Meeting Metadata Storage
+↓
+Calendar Event Created
+↓
+Teams Join Link Generated
+↓
+PostgreSQL (Dockerized Persistence Layer)
 
-Meeting AI Agent — Technical Overview
+⚙ Tech Stack
 
-1. Authentication Layer
+FastAPI
 
-OAuth 2.0 Authorization Code Flow
+Microsoft Graph API
 
-Access token stored temporarily in memory
+OAuth 2.0 (Azure Entra ID)
 
-Scopes:
+PostgreSQL
 
-Calendars.ReadWrite
+Docker & Docker Compose
 
-OnlineMeetings.ReadWrite
+psycopg2
 
-User.Read
+MSAL
 
-2. Scheduling Layer
+📦 Services
+meeting_ai_app
 
-Accepts:
+FastAPI application
 
-Subject
+Handles authentication
 
-Start time
+Calls Graph API
 
-Duration
+Writes meeting data to DB
 
-Attendees
+meeting_ai_db
 
-Converts duration → end time
+PostgreSQL container
 
-Calls Microsoft Graph /me/events
+Stores meeting metadata
 
-3. Teams Link Generation
-
-Generates mock Teams URL
-
-Injected into HTML body
-
-4. Persistence Layer
-
-PostgreSQL (Docker)
+📊 Database Schema
 
 meetings table:
+
+id (PK)
 
 event_id
 
@@ -72,10 +82,30 @@ organizer_email
 
 created_at
 
-5. Deployment Layer
+🔐 Security
 
-Docker Compose
+OAuth 2.0 Authorization Code Flow
 
-Isolated DB service
+Access tokens scoped:
 
-App communicates using service name meeting_ai_db
+Calendars.ReadWrite
+
+OnlineMeetings.ReadWrite
+
+User.Read
+
+🚀 Run Locally (Docker)
+docker compose up -d --build
+
+Open:
+
+http://localhost:8000/docs
+📈 Future Enhancements
+
+AI transcript summarization
+
+Availability scoring engine
+
+Meeting analytics dashboard
+
+Observability & structured logging
