@@ -1,72 +1,58 @@
-🚀 Meeting AI Agent (Enterprise-Grade)
-Overview
-
-A Dockerized FastAPI microservice that integrates Microsoft OAuth 2.0 and Microsoft Graph API to:
-
-Authenticate users securely
-
-Create calendar events
-
-Generate Teams-style meeting links
-
-Persist structured metadata in PostgreSQL
-
-Run fully containerized via Docker Compose
-
-🏗 Architecture
-
 User
-↓
-FastAPI (Docker)
-↓
-Microsoft Identity Platform (OAuth 2.0 Authorization Code Flow)
-↓
+  ↓
+FastAPI (Dockerized)
+  ↓
+Microsoft Identity Platform (OAuth 2.0)
+  ↓
 Microsoft Graph API
-↓
-Calendar Event Created
-↓
-Teams Join Link Generated
-↓
-PostgreSQL (Dockerized Persistence Layer)
+  ↓
+Calendar Event Creation
+  ↓
+Teams Meeting Link Generation
+  ↓
+PostgreSQL (Dockerized Persistence)
+  ↓
+Structured Meeting Metadata Storage
 
-⚙ Tech Stack
+Meeting AI Agent — Technical Overview
 
-FastAPI
+1. Authentication Layer
+OAuth 2.0 Authorization Code Flow
+Access token stored temporarily in memory
+Scopes:
+Calendars.ReadWrite
 
-Microsoft Graph API
+OnlineMeetings.ReadWrite
 
-OAuth 2.0 (Azure Entra ID)
+User.Read
 
-PostgreSQL
+2. Scheduling Layer
 
-Docker & Docker Compose
+Accepts:
 
-psycopg2
+Subject
 
-MSAL
+Start time
 
-📦 Services
-meeting_ai_app
+Duration
 
-FastAPI application
+Attendees
 
-Handles authentication
+Converts duration → end time
 
-Calls Graph API
+Calls Microsoft Graph /me/events
 
-Writes meeting data to DB
+3. Teams Link Generation
 
-meeting_ai_db
+Generates mock Teams URL
 
-PostgreSQL container
+Injected into HTML body
 
-Stores meeting metadata
+4. Persistence Layer
 
-📊 Database Schema
+PostgreSQL (Docker)
 
 meetings table:
-
-id (PK)
 
 event_id
 
@@ -82,30 +68,10 @@ organizer_email
 
 created_at
 
-🔐 Security
+5. Deployment Layer
 
-OAuth 2.0 Authorization Code Flow
+Docker Compose
 
-Access tokens scoped:
+Isolated DB service
 
-Calendars.ReadWrite
-
-OnlineMeetings.ReadWrite
-
-User.Read
-
-🚀 Run Locally (Docker)
-docker compose up -d --build
-
-Open:
-
-http://localhost:8000/docs
-📈 Future Enhancements
-
-AI transcript summarization
-
-Availability scoring engine
-
-Meeting analytics dashboard
-
-Observability & structured logging
+App communicates using service name meeting_ai_db
