@@ -15,6 +15,9 @@ PostgreSQL (Dockerized Persistence)
 Structured Meeting Metadata Storage
 
 
+## 🔄 Sequence Diagram
+
+```mermaid
 sequenceDiagram
 
     participant User
@@ -35,3 +38,4 @@ sequenceDiagram
     FastAPI->>DB: Insert meeting metadata
     DB-->>FastAPI: Commit success
     FastAPI-->>User: Join URL + Event ID
+```
