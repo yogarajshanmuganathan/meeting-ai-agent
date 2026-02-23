@@ -14,6 +14,37 @@ PostgreSQL (Dockerized Persistence)
   ↓
 Structured Meeting Metadata Storage
 
+
+flowchart LR
+
+    subgraph Client Layer
+        U[User]
+    end
+
+    subgraph Application Layer
+        A[FastAPI<br>Dockerized Microservice]
+    end
+
+    subgraph Identity Layer
+        I[Microsoft Identity<br>OAuth 2.0]
+    end
+
+    subgraph Integration Layer
+        G[Microsoft Graph API]
+    end
+
+    subgraph Persistence Layer
+        P[(PostgreSQL<br>Dockerized DB)]
+    end
+
+    U --> A
+    A --> I
+    I --> A
+    A --> G
+    G --> A
+    A --> P
+
+
 Meeting AI Agent — Technical Overview
 
 1. Authentication Layer
